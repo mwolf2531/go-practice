@@ -2,13 +2,16 @@ package main
 
 import (
 	"encoding/csv"
+	"flag"
 	"fmt"
 	"os"
+	"strings"
 )
 
 func main() {
+	csvFilename := flag.String("csv", "quiz_game/problems.csv", "a csv file in the format of 'questions,answer'")
 
-	file, err := os.Open("quiz_game/problems.csv")
+	file, err := os.Open(*csvFilename)
 
 	if err != nil {
 		fmt.Println("Cannot read file")
@@ -22,7 +25,21 @@ func main() {
 	}
 
 	problems := parseLines(lines)
-	fmt.Println(problems)
+
+	correct := 0
+
+	for i, p := range problems {
+		fmt.Printf("Problem #%d: %s = \n", i+1, p.q)
+		var answer string
+		fmt.Scanf("%s\n", &answer)
+		if answer == p.a {
+			correct++
+			fmt.Println("Correct!")
+		} else {
+			fmt.Println("Incorrect")
+		}
+	}
+	fmt.Printf("You scored %d out of %d.\n", correct, len(problems))
 }
 
 func parseLines(lines [][]string) []problem {
@@ -30,7 +47,7 @@ func parseLines(lines [][]string) []problem {
 	for i, line := range lines {
 		ret[i] = problem{
 			q: line[0],
-			a: line[1],
+			a: strings.TrimSpace(line[1]),
 		}
 	}
 	return ret
@@ -40,11 +57,3 @@ type problem struct {
 	q string
 	a string
 }
-
-// for {
-// 	record, err := csvReader.Read()
-// 	if err != nil {
-// 		break
-// 	}
-// 	fmt.Printf("Problem #%s Answer %s\n", record[0], record[1])
-// }
