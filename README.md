@@ -4,7 +4,7 @@
 ### Set Up
 ```
 $ git clone https://github.com/mwolf2531/go-practice.git
-$ go run quiz_game/quiz.go
+$ go run quiz_game/quiz.go -limit=(time limit you want in seconds)
 ```
 ### How to Play
 ```
